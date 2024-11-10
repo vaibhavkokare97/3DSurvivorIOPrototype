@@ -8,8 +8,8 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
     public Joystick joystick;
 
-    public GameObject debugPlayer;
-    public float3 playerPosition;
+    [SerializeField] private GameObject debugPlayer;
+    [HideInInspector] public float3 playerPosition;
 
     private void Awake()
     {
