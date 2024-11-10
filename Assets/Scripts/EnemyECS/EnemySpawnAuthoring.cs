@@ -4,6 +4,8 @@ using UnityEngine;
 class EnemySpawnAuthoring : MonoBehaviour
 {
     public GameObject enemyPrefab;
+    public GameObject specialEnemyPrefab;
+    public GameObject enemyBulletPrefab;
     public GameObject coinPrefab;
     public GameObject healthPrefab;
 
@@ -25,6 +27,8 @@ class EnemySpawnAuthoringBaker : Baker<EnemySpawnAuthoring>
         AddComponent(entity, new EnemySpawnComponent
         {
             enemyPrefab = GetEntity(authoring.enemyPrefab, TransformUsageFlags.None),
+            specialEnemyPrefab = GetEntity(authoring.specialEnemyPrefab, TransformUsageFlags.None),
+            enemyBulletPrefab = GetEntity(authoring.enemyBulletPrefab, TransformUsageFlags.None),
             coinPrefab = GetEntity(authoring.coinPrefab, TransformUsageFlags.None),
             healthPrefab = GetEntity(authoring.healthPrefab, TransformUsageFlags.None),
             EnemiesSpawnCountPerSecond = authoring.EnemiesSpawnCountPerSecond,

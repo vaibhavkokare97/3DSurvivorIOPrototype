@@ -44,10 +44,25 @@ partial struct EnemySpawnSystem : ISystem
             {
                 EntityCommandBuffer ECB = new EntityCommandBuffer(Allocator.Temp);
 
-                Entity enemyEntity = _entityManager.Instantiate(_enemySpawnComponent.enemyPrefab);
+               
+
+                Entity enemyEntity = new Entity();
 
                 LocalTransform enemyTransform = _entityManager.GetComponentData<LocalTransform>(enemyEntity);
                 LocalTransform playerTransform = _entityManager.GetComponentData<LocalTransform>(_playerEntity);
+
+                Random _random = Random.CreateFromIndex((uint)_enemySpawnComponent.GetHashCode());
+                int randomNum = _random.NextInt(0, 100);
+
+                    ECB.AddComponent(enemyEntity, new EnemyComponent
+                    {
+                        IsSpecial = randomNum < 15f,
+                        CurrentHealth = (randomNum < 15f) ? 160f : 100f,
+                        Speed = (randomNum < 15f) ? 0f : 1f,
+                        Damage = (randomNum < 15f) ? 1f : 5f
+                    });
+
+                enemyEntity = _entityManager.Instantiate((randomNum < 15f) ? _enemySpawnComponent.specialEnemyPrefab : _enemySpawnComponent.enemyPrefab);
 
                 float minDistanceSquared = _enemySpawnComponent.MinDistanceFromPlayer * _enemySpawnComponent.MinDistanceFromPlayer;
                 float2 randomOffset = _random.NextFloat2Direction() *
@@ -63,12 +78,7 @@ partial struct EnemySpawnSystem : ISystem
                 enemyTransform.Position = new float3(spawnPosition.x, 0f, spawnPosition.y);
 
                 ECB.SetComponent(enemyEntity, enemyTransform);
-                ECB.AddComponent(enemyEntity, new EnemyComponent
-                {
-                    CurrentHealth = 100f,
-                    Speed = 1f,
-                    Damage = 5f
-                });
+                
 
                 ECB.Playback(_entityManager);
                 ECB.Dispose();

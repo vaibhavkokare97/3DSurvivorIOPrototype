@@ -48,77 +48,95 @@ partial struct BulletSystem : ISystem
 
                 entityManager.SetComponentData(entity, bulletLifeTimeComponent);
 
-                NativeList<ColliderCastHit> hits = new NativeList<ColliderCastHit>(Allocator.Temp);
-
-                physicsWorld.SphereCastAll(new float3(bulletTransform.Position), bulletTransform.Scale, float3.zero, 1f, ref hits, new CollisionFilter
+                if (entityManager.HasComponent<IsEnemyItem>(entity))
                 {
-                    BelongsTo = (uint)1 << 8,
-                    CollidesWith = (uint)1 << 7
-                });
-
-
-                if (hits.Length > 0)
-                {
-                    for (int i = 0; i < hits.Length; i++)
+                    NativeList<ColliderCastHit> hitsPlayer = new NativeList<ColliderCastHit>(Allocator.Temp);
+                    physicsWorld.SphereCastAll(new float3(bulletTransform.Position), bulletTransform.Scale, float3.zero, 1f, ref hitsPlayer, new CollisionFilter
                     {
-                        Entity hitEntity = hits[i].Entity;
+                        BelongsTo = (uint)1 << 9,
+                        CollidesWith = (uint)1 << 6
+                    });
+                }
+                else
+                {
+                    NativeList<ColliderCastHit> hitsEnemy = new NativeList<ColliderCastHit>(Allocator.Temp);
 
-                        if (entityManager.HasComponent<EnemyComponent>(hitEntity))
+                    physicsWorld.SphereCastAll(new float3(bulletTransform.Position), bulletTransform.Scale, float3.zero, 1f, ref hitsEnemy, new CollisionFilter
+                    {
+                        BelongsTo = (uint)1 << 8,
+                        CollidesWith = (uint)1 << 7
+                    });
+
+                    if (hitsEnemy.Length > 0)
+                    {
+                        for (int i = 0; i < hitsEnemy.Length; i++)
                         {
-                            EnemyComponent enemyComponent = entityManager.GetComponentData<EnemyComponent>(hitEntity);
-                            LocalTransform enemyTransform = entityManager.GetComponentData<LocalTransform>(hitEntity);
-                            enemyComponent.CurrentHealth -= bulletComponent.Damage;
-                            entityManager.SetComponentData(hitEntity, enemyComponent);
+                            Entity hitEntity = hitsEnemy[i].Entity;
 
-                            if (enemyComponent.CurrentHealth <= 0f)
+                            if (entityManager.HasComponent<EnemyComponent>(hitEntity))
                             {
-                                Random _random = Random.CreateFromIndex((uint)_enemySpawnComponent.GetHashCode());
-                                int randomNum = _random.NextInt(0, 100);
+                                EnemyComponent enemyComponent = entityManager.GetComponentData<EnemyComponent>(hitEntity);
+                                LocalTransform enemyTransform = entityManager.GetComponentData<LocalTransform>(hitEntity);
+                                enemyComponent.CurrentHealth -= bulletComponent.Damage;
+                                entityManager.SetComponentData(hitEntity, enemyComponent);
 
-                                EntityCommandBuffer ECB = new EntityCommandBuffer(Allocator.Temp);
-                                if (randomNum > 30)
+                                if (enemyComponent.CurrentHealth <= 0f)
                                 {
+                                    Random _random = Random.CreateFromIndex((uint)_enemySpawnComponent.GetHashCode());
+                                    int randomNum = _random.NextInt(0, 100);
 
-                                    //CoinComponent coinComponent = entityManager.GetComponentData<CoinComponent>();
-                                    Entity coinEntity = entityManager.Instantiate(_enemySpawnComponent.coinPrefab);
-                                    ECB.AddComponent(coinEntity, new CoinComponent
+                                    EntityCommandBuffer ECB = new EntityCommandBuffer(Allocator.Temp);
+                                    if (randomNum > 30)
                                     {
-                                        coinIncrementValue = 1
-                                    });
 
-                                    LocalTransform coinTransform = entityManager.GetComponentData<LocalTransform>(coinEntity);
-                                    coinTransform.Position = enemyTransform.Position;
+                                        //CoinComponent coinComponent = entityManager.GetComponentData<CoinComponent>();
+                                        Entity coinEntity = entityManager.Instantiate(_enemySpawnComponent.coinPrefab);
+                                        ECB.AddComponent(coinEntity, new CoinComponent
+                                        {
+                                            coinIncrementValue = 1
+                                        });
 
-                                    ECB.SetComponent(coinEntity, coinTransform);
+                                        LocalTransform coinTransform = entityManager.GetComponentData<LocalTransform>(coinEntity);
+                                        coinTransform.Position = enemyTransform.Position;
+
+                                        ECB.SetComponent(coinEntity, coinTransform);
+
+                                    }
+                                    else
+                                    {
+                                        //CoinComponent coinComponent = entityManager.GetComponentData<CoinComponent>();
+                                        Entity healthEntity = entityManager.Instantiate(_enemySpawnComponent.healthPrefab);
+                                        ECB.AddComponent(healthEntity, new HealthPackComponent
+                                        {
+                                            healthIncrementValue = 10f
+                                        });
+
+                                        LocalTransform healthPackTransform = entityManager.GetComponentData<LocalTransform>(healthEntity);
+                                        healthPackTransform.Position = enemyTransform.Position;
+
+                                        ECB.SetComponent(healthEntity, healthPackTransform);
+                                    }
+
+                                    ECB.Playback(entityManager);
+                                    ECB.Dispose();
+
+                                    entityManager.DestroyEntity(hitEntity);
 
                                 }
-                                else
-                                {
-                                    //CoinComponent coinComponent = entityManager.GetComponentData<CoinComponent>();
-                                    Entity healthEntity = entityManager.Instantiate(_enemySpawnComponent.healthPrefab);
-                                    ECB.AddComponent(healthEntity, new HealthPackComponent
-                                    {
-                                        healthIncrementValue = 10f
-                                    });
-
-                                    LocalTransform healthPackTransform = entityManager.GetComponentData<LocalTransform>(healthEntity);
-                                    healthPackTransform.Position = enemyTransform.Position;
-
-                                    ECB.SetComponent(healthEntity, healthPackTransform);
-                                }
-
-                                ECB.Playback(entityManager);
-                                ECB.Dispose();
-
-                                entityManager.DestroyEntity(hitEntity);
-
                             }
                         }
+                        entityManager.DestroyEntity(entity);
                     }
-                    entityManager.DestroyEntity(entity);
+                    hitsEnemy.Dispose();
                 }
+                
 
-                hits.Dispose();
+                
+
+
+                
+
+                
             }
         }
     }

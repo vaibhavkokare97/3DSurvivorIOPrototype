@@ -13,8 +13,6 @@ public partial struct PlayerSystem : ISystem
     private PlayerComponent _playerComponent;
     private LocalTransform _playerTransform;
 
-    private GameMangerRef _gameManagerComponent;
-
     [BurstCompile]
     public void OnCreate(ref SystemState state)
     {
@@ -138,7 +136,7 @@ public partial struct PlayerSystem : ISystem
 
                     if (_playerComponent.currentHealth <= 0f)
                     {
-                        _entityManager.DestroyEntity(_playerEntity);
+                        //_entityManager.DestroyEntity(_playerEntity);
                         // GameOver
                     }
                     _entityManager.DestroyEntity(hitEntity);

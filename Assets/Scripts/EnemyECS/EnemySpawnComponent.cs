@@ -3,6 +3,8 @@ using Unity.Entities;
 public struct EnemySpawnComponent : IComponentData
 {
     public Entity enemyPrefab;
+    public Entity specialEnemyPrefab;
+    public Entity enemyBulletPrefab;
     public Entity coinPrefab;
     public Entity healthPrefab;
 
