@@ -103,7 +103,7 @@ public partial struct PlayerSystem : ISystem
                 gameManagerRef.Value.Value.joystick.Vertical * SystemAPI.Time.DeltaTime) * _playerComponent.moveSpeed;
 
             gameManagerRef.Value.Value.playerPosition = _playerTransform.Position;
-            gameManagerRef.Value.Value.playerHealthCount = _playerComponent.currentHealth;
+            gameManagerRef.Value.Value.healthCount = _playerComponent.currentHealth;
             gameManagerRef.Value.Value.coinCount = _playerComponent.coinCount;
 
             _entityManager.SetComponentData(_playerEntity, _playerTransform);

@@ -1,14 +1,43 @@
 using UnityEngine;
 using Unity.Entities;
 using Unity.Mathematics;
-using Unity.Transforms;
+using System;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
     public Joystick joystick;
-    public int coinCount;
-    public float playerHealthCount;
+
+    private int _coinCount;
+    public int coinCount
+    {
+        get
+        {
+            return _coinCount;
+        }
+        set
+        {
+            _coinCount = value;
+            onCoinCountChange?.Invoke(_coinCount);
+        }
+    }
+    public Action<int> onCoinCountChange;
+
+    private float _healthCount;
+    public float healthCount
+    {
+        get
+        {
+            return _healthCount;
+        }
+        set
+        {
+            _healthCount = Mathf.Clamp(value, 0f, 100f);
+            OnHealthChange?.Invoke(_healthCount);
+        }
+    }
+    public Action<float> OnHealthChange;
+
 
     [SerializeField] private GameObject debugPlayer;
     [HideInInspector] public float3 playerPosition;
