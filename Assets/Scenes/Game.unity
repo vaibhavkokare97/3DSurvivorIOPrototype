@@ -915,6 +915,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   joystick: {fileID: 1705390480}
+  coinCount: 0
+  playerHealthCount: 0
   debugPlayer: {fileID: 59651280}
   playerPosition:
     x: 0

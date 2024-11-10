@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
     public Joystick joystick;
+    public int coinCount;
+    public float playerHealthCount;
 
     [SerializeField] private GameObject debugPlayer;
     [HideInInspector] public float3 playerPosition;

@@ -50,9 +50,9 @@ partial struct EnemySpawnSystem : ISystem
                 LocalTransform playerTransform = _entityManager.GetComponentData<LocalTransform>(_playerEntity);
 
                 float minDistanceSquared = _enemySpawnComponent.MinDistanceFromPlayer * _enemySpawnComponent.MinDistanceFromPlayer;
-                float2 randomOffset = _random.NextFloat2Direction() * 
+                float2 randomOffset = _random.NextFloat2Direction() *
                     _random.NextFloat(_enemySpawnComponent.MinDistanceFromPlayer, _enemySpawnComponent.EnemySpawnRadius);
-                float2 playerPosition = new float2(playerTransform.Position.x, playerTransform.Position.y);
+                float2 playerPosition = new float2(playerTransform.Position.x, playerTransform.Position.z);
                 float2 spawnPosition = playerPosition + randomOffset;
                 float distanceSquared = math.lengthsq(spawnPosition - playerPosition);
 
@@ -66,13 +66,16 @@ partial struct EnemySpawnSystem : ISystem
                 ECB.AddComponent(enemyEntity, new EnemyComponent
                 {
                     CurrentHealth = 100f,
-                    Speed = 1f
-
+                    Speed = 1f,
+                    Damage = 5f
                 });
 
                 ECB.Playback(_entityManager);
                 ECB.Dispose();
             }
+
+            _enemySpawnComponent.EnemiesSpawnCountPerSecond = math.min(_enemySpawnComponent.EnemiesSpawnCountPerSecond + _enemySpawnComponent.EnemiesSpawnIncrementAmount,
+                _enemySpawnComponent.MaxEnemiesSpawnPerSecond);
 
             _enemySpawnComponent.CurrentTimeBeforeSpawn = _enemySpawnComponent.TimeBeforeNextSpawn;
         }
@@ -83,6 +86,6 @@ partial struct EnemySpawnSystem : ISystem
     [BurstCompile]
     public void OnDestroy(ref SystemState state)
     {
-        
+
     }
 }

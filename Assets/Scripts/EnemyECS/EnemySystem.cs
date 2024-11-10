@@ -3,6 +3,7 @@ using Unity.Entities;
 using Unity.Transforms;
 using Unity.Collections;
 using Unity.Mathematics;
+using Unity.Physics;
 
 partial struct EnemySystem : ISystem
 {
@@ -15,7 +16,7 @@ partial struct EnemySystem : ISystem
     [BurstCompile]
     public void OnCreate(ref SystemState state)
     {
-        
+
     }
 
     [BurstCompile]
@@ -32,17 +33,19 @@ partial struct EnemySystem : ISystem
     {
         NativeArray<Entity> allEnemies = _entityManager.GetAllEntities();
 
+
         foreach (Entity enemy in allEnemies)
         {
             if (_entityManager.HasComponent<EnemyComponent>(enemy))
             {
+                //move
+
                 LocalTransform enemyTransform = _entityManager.GetComponentData<LocalTransform>(enemy);
                 EnemyComponent enemyComponent = _entityManager.GetComponentData<EnemyComponent>(enemy);
 
                 float3 moveDirection = math.normalize(_playerTransform.Position - enemyTransform.Position);
 
                 enemyTransform.Position += enemyComponent.Speed * moveDirection * SystemAPI.Time.DeltaTime;
-
                 _entityManager.SetComponentData(enemy, enemyTransform);
             }
         }
@@ -51,6 +54,6 @@ partial struct EnemySystem : ISystem
     [BurstCompile]
     public void OnDestroy(ref SystemState state)
     {
-        
+
     }
 }

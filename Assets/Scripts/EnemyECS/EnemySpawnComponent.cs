@@ -3,6 +3,8 @@ using Unity.Entities;
 public struct EnemySpawnComponent : IComponentData
 {
     public Entity enemyPrefab;
+    public Entity coinPrefab;
+    public Entity healthPrefab;
 
     public int EnemiesSpawnCountPerSecond;
     public int EnemiesSpawnIncrementAmount;

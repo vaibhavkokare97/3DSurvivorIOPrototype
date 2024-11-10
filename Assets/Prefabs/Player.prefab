@@ -79,7 +79,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 888a3ce28d58fad4aa96962066b808bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentHealth: 100
   moveSpeed: 5
+  bulletPrefab: {fileID: 203719987760350705, guid: c227a7b834fdda149bd81ec7fdf119f4, type: 3}
 --- !u!65 &3297129295216979402
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -95,7 +97,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
