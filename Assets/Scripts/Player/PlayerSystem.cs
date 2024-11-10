@@ -11,6 +11,8 @@ public partial struct PlayerSystem : ISystem
     private Entity _playerEntity;
     private PlayerComponent _playerComponent;
 
+    private GameMangerRef _gameManagerComponent;
+
     [BurstCompile]
     public void OnCreate(ref SystemState state)
     {
@@ -29,8 +31,18 @@ public partial struct PlayerSystem : ISystem
 
     private void Move(ref SystemState state)
     {
-        LocalTransform playerTransform = _entityManager.GetComponentData<LocalTransform>(_playerEntity);
-        playerTransform.Position = new float3();
+        foreach(var gameManagerRef in SystemAPI.Query<GameMangerRef>())
+        {
+            LocalTransform playerTransform = _entityManager.GetComponentData<LocalTransform>(_playerEntity);
+            playerTransform.Position += new float3(gameManagerRef.Value.Value.joystick.Horizontal * SystemAPI.Time.DeltaTime,
+                0,
+                gameManagerRef.Value.Value.joystick.Vertical * SystemAPI.Time.DeltaTime) * _playerComponent.moveSpeed;
+
+            gameManagerRef.Value.Value.playerPosition = playerTransform.Position;
+
+            _entityManager.SetComponentData(_playerEntity, playerTransform);
+        }
+        
     }
 
     [BurstCompile]

@@ -3,7 +3,7 @@ using UnityEngine;
 
 internal class PlayerAuthoring : MonoBehaviour
 {
-    public float moveSpeed = 5f;
+    public float moveSpeed = 0.1f;
 }
 
 class PlayerAuthoringBaker : Baker<PlayerAuthoring>
