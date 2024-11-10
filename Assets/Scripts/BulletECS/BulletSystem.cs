@@ -19,6 +19,8 @@ partial struct BulletSystem : ISystem
         EntityManager entityManager = state.EntityManager;
         NativeArray<Entity> allEntities = entityManager.GetAllEntities();
 
+        PhysicsWorldSingleton physicsWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
+
         foreach (Entity entity in allEntities)
         {
             if (entityManager.HasComponent<BulletComponent>(entity) && entityManager.HasComponent<BulletLifeTimeComponent>(entity))
@@ -39,6 +41,8 @@ partial struct BulletSystem : ISystem
                 }
 
                 entityManager.SetComponentData(entity, bulletLifeTimeComponent);
+
+                //NativeList<ColliderCastHit> hits = 
             }
         }
     }
