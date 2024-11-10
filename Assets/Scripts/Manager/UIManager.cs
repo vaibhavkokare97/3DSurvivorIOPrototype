@@ -14,7 +14,10 @@ public class UIManager : MonoBehaviour
         {
             Instance = this;
         }
+    }
 
+    private void OnEnable()
+    {
         GameManager.Instance.onCoinCountChange += ChangeCoinUIText;
         GameManager.Instance.OnHealthChange += ChangeHealthBar;
     }
@@ -36,6 +39,8 @@ public class UIManager : MonoBehaviour
 
     private void OnDisable()
     {
+        GameManager.Instance.onCoinCountChange -= ChangeCoinUIText;
+        GameManager.Instance.OnHealthChange -= ChangeHealthBar;
         Instance = null;
     }
 }
