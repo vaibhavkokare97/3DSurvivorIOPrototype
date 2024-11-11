@@ -55,6 +55,10 @@ public class UIManager : MonoBehaviour
     {
         GameManager.Instance.onCoinCountChange -= ChangeCoinUIText;
         GameManager.Instance.OnHealthChange -= ChangeHealthBar;
+    }
+
+    private void OnDestroy()
+    {
         Instance = null;
     }
 }

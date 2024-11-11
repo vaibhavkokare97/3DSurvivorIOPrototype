@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour
         debugPlayer.transform.position = playerPosition;
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         Instance = null;
     }

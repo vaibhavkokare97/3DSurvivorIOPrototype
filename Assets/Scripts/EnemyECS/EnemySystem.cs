@@ -29,7 +29,7 @@ partial struct EnemySystem : ISystem
         _playerEntity = SystemAPI.GetSingletonEntity<PlayerComponent>();
         _playerTransform = _entityManager.GetComponentData<LocalTransform>(_playerEntity);
         _enemySpawnEntity = SystemAPI.GetSingletonEntity<EnemySpawnComponent>();
-        _enemySpawnComponent = _entityManager.GetComponentData<EnemySpawnComponent>(_playerEntity);
+        _enemySpawnComponent = _entityManager.GetComponentData<EnemySpawnComponent>(_enemySpawnEntity);
 
         MoveAndAttack(ref state);
     }
@@ -51,11 +51,12 @@ partial struct EnemySystem : ISystem
 
                 enemyTransform.Position += enemyComponent.Speed * moveDirection * SystemAPI.Time.DeltaTime;
 
-                if (enemyComponent.IsSpecial)
+                enemyComponent.incrementalCheckForPlayerInterval += SystemAPI.Time.DeltaTime;
+                if (enemyComponent.IsSpecial && enemyComponent.incrementalCheckForPlayerInterval > 1f)
                 {
                     NativeList<ColliderCastHit> hits = new NativeList<ColliderCastHit>(Allocator.Temp);
 
-                    physicsWorld.SphereCastAll(new float3(_playerTransform.Position), 10f, float3.zero, 4f, ref hits, new CollisionFilter
+                    physicsWorld.SphereCastAll(new float3(enemyTransform.Position), 20f, float3.zero, 4f, ref hits, new CollisionFilter
                     {
                         BelongsTo = (uint)1 << 7,
                         CollidesWith = (uint)1 << 6
@@ -96,6 +97,7 @@ partial struct EnemySystem : ISystem
                                 break;
                             }
                         }
+                        enemyComponent.incrementalCheckForPlayerInterval = 0f;
                     }
                         
                 }

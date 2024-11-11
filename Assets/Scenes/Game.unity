@@ -1965,6 +1965,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _coinText: {fileID: 102459140}
+  _gameOverPanel: {fileID: 121780887}
+  _gameRestartButton: {fileID: 1593798390}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
