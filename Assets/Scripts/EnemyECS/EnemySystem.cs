@@ -16,19 +16,27 @@ partial struct EnemySystem : ISystem
     private EnemySpawnComponent _enemySpawnComponent;
 
 
-    [BurstCompile]
-    public void OnCreate(ref SystemState state)
-    {
-
-    }
-
-    [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
         _entityManager = state.EntityManager;
-        _playerEntity = SystemAPI.GetSingletonEntity<PlayerComponent>();
+        if (SystemAPI.HasSingleton<PlayerComponent>())
+        {
+            _playerEntity = SystemAPI.GetSingletonEntity<PlayerComponent>();
+        }
+        else
+        {
+            return;
+        }
+
+        if (SystemAPI.HasSingleton<EnemySpawnComponent>())
+        {
+            _enemySpawnEntity = SystemAPI.GetSingletonEntity<EnemySpawnComponent>();
+        }
+        else
+        {
+            return;
+        }
         _playerTransform = _entityManager.GetComponentData<LocalTransform>(_playerEntity);
-        _enemySpawnEntity = SystemAPI.GetSingletonEntity<EnemySpawnComponent>();
         _enemySpawnComponent = _entityManager.GetComponentData<EnemySpawnComponent>(_enemySpawnEntity);
 
         UpdateEnemies(ref state);
@@ -107,11 +115,5 @@ partial struct EnemySystem : ISystem
                 _entityManager.SetComponentData(enemy, enemyComponent);
             }
         }
-    }
-
-    [BurstCompile]
-    public void OnDestroy(ref SystemState state)
-    {
-
     }
 }

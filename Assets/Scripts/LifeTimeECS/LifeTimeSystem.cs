@@ -12,17 +12,17 @@ partial struct LifeTimeSystem : ISystem
     private Entity _playerEntity;
     private LocalTransform _playerTransform;
 
-    [BurstCompile]
-    public void OnCreate(ref SystemState state)
-    {
-
-    }
-
-    [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
         _entityManager = state.EntityManager;
-        _playerEntity = SystemAPI.GetSingletonEntity<PlayerComponent>();
+        if (SystemAPI.HasSingleton<PlayerComponent>())
+        {
+            _playerEntity = SystemAPI.GetSingletonEntity<PlayerComponent>();
+        }
+        else
+        {
+            return;
+        }
         _playerTransform = _entityManager.GetComponentData<LocalTransform>(_playerEntity);
         NativeArray<Entity> allLifeTimeEntities = _entityManager.GetAllEntities();
 
@@ -43,11 +43,5 @@ partial struct LifeTimeSystem : ISystem
                 _entityManager.SetComponentData(entity, lifeTimeComponent);
             }
         }
-    }
-
-    [BurstCompile]
-    public void OnDestroy(ref SystemState state)
-    {
-
     }
 }

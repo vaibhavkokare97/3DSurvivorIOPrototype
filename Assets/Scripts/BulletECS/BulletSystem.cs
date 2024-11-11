@@ -11,12 +11,6 @@ partial struct BulletSystem : ISystem
     private Entity _enemySpawnEntity;
     private EnemySpawnComponent _enemySpawnComponent;
 
-    [BurstCompile]
-    public void OnCreate(ref SystemState state)
-    {
-
-    }
-
     public void OnUpdate(ref SystemState state)
     {
         _entityManager = state.EntityManager;
@@ -144,11 +138,5 @@ partial struct BulletSystem : ISystem
                 
             }
         }
-    }
-
-    [BurstCompile]
-    public void OnDestroy(ref SystemState state)
-    {
-
     }
 }

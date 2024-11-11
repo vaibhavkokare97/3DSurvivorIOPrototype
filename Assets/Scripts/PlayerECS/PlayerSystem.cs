@@ -13,12 +13,6 @@ public partial struct PlayerSystem : ISystem
     private PlayerComponent _playerComponent;
     private LocalTransform _playerTransform;
 
-    [BurstCompile]
-    public void OnCreate(ref SystemState state)
-    {
-
-    }
-
     public void OnUpdate(ref SystemState state)
     {
         _entityManager = state.EntityManager;
@@ -185,11 +179,5 @@ public partial struct PlayerSystem : ISystem
         }
 
         hits.Dispose();
-    }
-
-    [BurstCompile]
-    public void OnDestroy(ref SystemState state)
-    {
-
     }
 }

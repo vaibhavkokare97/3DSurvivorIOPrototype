@@ -21,7 +21,6 @@ partial struct EnemySpawnSystem : ISystem
 
     }
 
-    [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
         _entityManager = state.EntityManager;
@@ -33,6 +32,7 @@ partial struct EnemySpawnSystem : ISystem
         {
             return;
         }
+
         if (SystemAPI.HasSingleton<EnemySpawnComponent>())
         {
             _enemySpawnerEntity = SystemAPI.GetSingletonEntity<EnemySpawnComponent>();
@@ -102,11 +102,5 @@ partial struct EnemySpawnSystem : ISystem
         }
 
         _entityManager.SetComponentData(_enemySpawnerEntity, _enemySpawnComponent);
-    }
-
-    [BurstCompile]
-    public void OnDestroy(ref SystemState state)
-    {
-
     }
 }
