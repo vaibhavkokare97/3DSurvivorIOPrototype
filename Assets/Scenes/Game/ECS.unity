@@ -149,6 +149,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 5480922514633976598, guid: 9b834818c358ef943b1089a530cca022, type: 3}
+  specialEnemyPrefab: {fileID: 5480922514633976598, guid: a9e466eecc0dd9840b676b17a32f799c, type: 3}
+  enemyBulletPrefab: {fileID: 5499542971909084948, guid: 7d82a608c629a094cbbdbc2858665e1a, type: 3}
   coinPrefab: {fileID: 5669557879359360275, guid: 79ffec1c6d260304caba69c3776d4ca8, type: 3}
   healthPrefab: {fileID: 6767339727971222503, guid: 7ac9be901cb7229428a4cb5990d40e5d, type: 3}
   EnemiesSpawnCountPerSecond: 10
