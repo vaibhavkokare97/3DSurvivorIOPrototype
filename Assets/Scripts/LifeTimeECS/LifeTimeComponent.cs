@@ -1,6 +1,6 @@
 using Unity.Entities;
 
-public struct BulletLifeTimeComponent : IComponentData
+public struct LifeTimeComponent : IComponentData
 {
     public float RemainingLife;
 }

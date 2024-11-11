@@ -51,11 +51,16 @@ partial struct EnemySpawnSystem : ISystem
                 LocalTransform enemyTransform = _entityManager.GetComponentData<LocalTransform>(enemyEntity);
                 ECB.AddComponent(enemyEntity, new EnemyComponent
                 {
-                    incrementalCheckForPlayerInterval = 0f,
+                    incrementalCheckForPlayerInterval = 2f,
                     IsSpecial = randomNum < 15f,
                     CurrentHealth = (randomNum < 15f) ? 160f : 100f,
                     Speed = (randomNum < 15f) ? 0f : 1f,
                     Damage = (randomNum < 15f) ? 1f : 5f
+                });
+
+                ECB.AddComponent(enemyEntity, new LifeTimeComponent
+                {
+                    RemainingLife = 10f
                 });
 
                 float minDistanceSquared = _enemySpawnComponent.MinDistanceFromPlayer * _enemySpawnComponent.MinDistanceFromPlayer;

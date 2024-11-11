@@ -28,7 +28,7 @@ partial struct BulletSystem : ISystem
 
         foreach (Entity entity in allEntities)
         {
-            if (entityManager.HasComponent<BulletComponent>(entity) && entityManager.HasComponent<BulletLifeTimeComponent>(entity))
+            if (entityManager.HasComponent<BulletComponent>(entity))
             {
                 LocalTransform bulletTransform = entityManager.GetComponentData<LocalTransform>(entity);
                 BulletComponent bulletComponent = entityManager.GetComponentData<BulletComponent>(entity);
@@ -36,17 +36,6 @@ partial struct BulletSystem : ISystem
                 bulletTransform.Position += new float3(bulletComponent.DirectionX, 0f, bulletComponent.DirectionZ) *
                     bulletComponent.Speed * SystemAPI.Time.DeltaTime;
                 entityManager.SetComponentData(entity, bulletTransform);
-
-                BulletLifeTimeComponent bulletLifeTimeComponent = entityManager.GetComponentData<BulletLifeTimeComponent>(entity);
-                bulletLifeTimeComponent.RemainingLife -= SystemAPI.Time.DeltaTime;
-
-                if (bulletLifeTimeComponent.RemainingLife <= 0f)
-                {
-                    entityManager.DestroyEntity(entity);
-                    continue;
-                }
-
-                entityManager.SetComponentData(entity, bulletLifeTimeComponent);
 
                 if (entityManager.HasComponent<IsEnemyItem>(entity))
                 {
@@ -56,6 +45,7 @@ partial struct BulletSystem : ISystem
                         BelongsTo = (uint)1 << 9,
                         CollidesWith = (uint)1 << 6
                     });
+                    hitsPlayer.Dispose();
                 }
                 else
                 {
@@ -96,6 +86,11 @@ partial struct BulletSystem : ISystem
                                             coinIncrementValue = 1
                                         });
 
+                                        ECB.AddComponent(coinEntity, new LifeTimeComponent
+                                        {
+                                            RemainingLife = 30f
+                                        });
+
                                         LocalTransform coinTransform = entityManager.GetComponentData<LocalTransform>(coinEntity);
                                         coinTransform.Position = enemyTransform.Position;
 
@@ -109,6 +104,10 @@ partial struct BulletSystem : ISystem
                                         ECB.AddComponent(healthEntity, new HealthPackComponent
                                         {
                                             healthIncrementValue = 10f
+                                        });
+                                        ECB.AddComponent(healthEntity, new LifeTimeComponent
+                                        {
+                                            RemainingLife = 30f
                                         });
 
                                         LocalTransform healthPackTransform = entityManager.GetComponentData<LocalTransform>(healthEntity);

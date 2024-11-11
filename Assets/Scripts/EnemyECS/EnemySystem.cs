@@ -31,10 +31,10 @@ partial struct EnemySystem : ISystem
         _enemySpawnEntity = SystemAPI.GetSingletonEntity<EnemySpawnComponent>();
         _enemySpawnComponent = _entityManager.GetComponentData<EnemySpawnComponent>(_enemySpawnEntity);
 
-        MoveAndAttack(ref state);
+        UpdateEnemies(ref state);
     }
 
-    private void MoveAndAttack(ref SystemState state)
+    private void UpdateEnemies(ref SystemState state)
     {
         NativeArray<Entity> allEnemies = _entityManager.GetAllEntities();
         PhysicsWorldSingleton physicsWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
@@ -52,11 +52,11 @@ partial struct EnemySystem : ISystem
                 enemyTransform.Position += enemyComponent.Speed * moveDirection * SystemAPI.Time.DeltaTime;
 
                 enemyComponent.incrementalCheckForPlayerInterval += SystemAPI.Time.DeltaTime;
-                if (enemyComponent.IsSpecial && enemyComponent.incrementalCheckForPlayerInterval > 1f)
+                if (enemyComponent.IsSpecial && enemyComponent.incrementalCheckForPlayerInterval > 4f)
                 {
                     NativeList<ColliderCastHit> hits = new NativeList<ColliderCastHit>(Allocator.Temp);
 
-                    physicsWorld.SphereCastAll(new float3(enemyTransform.Position), 20f, float3.zero, 4f, ref hits, new CollisionFilter
+                    physicsWorld.SphereCastAll(new float3(enemyTransform.Position), 11f, float3.zero, 4f, ref hits, new CollisionFilter
                     {
                         BelongsTo = (uint)1 << 7,
                         CollidesWith = (uint)1 << 6
@@ -73,16 +73,16 @@ partial struct EnemySystem : ISystem
                                 Entity bulletEntity = _entityManager.Instantiate(_enemySpawnComponent.enemyBulletPrefab);
 
                                 LocalTransform hitEntityTransform = _entityManager.GetComponentData<LocalTransform>(hitEntity);
-                                float3 direction = math.normalize(enemyTransform.Position - hitEntityTransform.Position);
+                                float3 direction = math.normalize(hitEntityTransform.Position - enemyTransform.Position);
                                 ECB.AddComponent(bulletEntity, new BulletComponent
                                 {
-                                    Speed = 25f,
-                                    Damage = 10f,
+                                    Speed = 10f,
+                                    Damage = 2f,
                                     DirectionX = direction.x,
                                     DirectionZ = direction.z
                                 });
 
-                                ECB.AddComponent(bulletEntity, new BulletLifeTimeComponent
+                                ECB.AddComponent(bulletEntity, new LifeTimeComponent
                                 {
                                     RemainingLife = 3f
                                 });
@@ -99,10 +99,12 @@ partial struct EnemySystem : ISystem
                         }
                         enemyComponent.incrementalCheckForPlayerInterval = 0f;
                     }
-                        
+                    hits.Dispose();
                 }
 
+
                 _entityManager.SetComponentData(enemy, enemyTransform);
+                _entityManager.SetComponentData(enemy, enemyComponent);
             }
         }
     }

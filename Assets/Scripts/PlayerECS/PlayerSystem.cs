@@ -44,7 +44,7 @@ public partial struct PlayerSystem : ISystem
             physicsWorld.SphereCastAll(new float3(_playerTransform.Position), 10f, float3.zero, 4f, ref hits, new CollisionFilter
             {
                 BelongsTo = (uint)1 << 6,
-                CollidesWith = (uint)1 << 7
+                CollidesWith = (uint)1 << 7 | (uint)1 << 9
             });
 
 
@@ -68,9 +68,9 @@ public partial struct PlayerSystem : ISystem
                             DirectionZ = direction.z
                         });
 
-                        ECB.AddComponent(bulletEntity, new BulletLifeTimeComponent
+                        ECB.AddComponent(bulletEntity, new LifeTimeComponent
                         {
-                            RemainingLife = 1.5f
+                            RemainingLife = 3f
                         });
 
                         LocalTransform bulletTransform = _entityManager.GetComponentData<LocalTransform>(bulletEntity);
@@ -96,6 +96,10 @@ public partial struct PlayerSystem : ISystem
     {
         foreach (var gameManagerRef in SystemAPI.Query<GameMangerRef>())
         {
+            if (gameManagerRef.Value != null)
+            {
+                break;
+            }
             _playerTransform.Position += new float3(gameManagerRef.Value.Value.joystick.Horizontal * SystemAPI.Time.DeltaTime,
                 0,
                 gameManagerRef.Value.Value.joystick.Vertical * SystemAPI.Time.DeltaTime) * _playerComponent.moveSpeed;
@@ -154,6 +158,19 @@ public partial struct PlayerSystem : ISystem
                     _playerComponent.currentHealth += healthComponent.healthIncrementValue;
                     _playerComponent.currentHealth = math.min(_playerComponent.currentHealth, _playerComponent.maxHealth);
                     _entityManager.SetComponentData(_playerEntity, _playerComponent);
+                    _entityManager.DestroyEntity(hitEntity);
+                }
+                else if (_entityManager.HasComponent<BulletComponent>(hitEntity))
+                {
+                    BulletComponent bulletComponent = _entityManager.GetComponentData<BulletComponent>(hitEntity);
+                    _playerComponent.currentHealth -= bulletComponent.Damage;
+                    _entityManager.SetComponentData(_playerEntity, _playerComponent);
+
+                    if (_playerComponent.currentHealth <= 0f)
+                    {
+                        //_entityManager.DestroyEntity(_playerEntity);
+                        // GameOver
+                    }
                     _entityManager.DestroyEntity(hitEntity);
                 }
             }
