@@ -21,7 +21,13 @@ partial struct BulletSystem : ISystem
     {
         _entityManager = state.EntityManager;
         NativeArray<Entity> allEntities = _entityManager.GetAllEntities();
-        _enemySpawnEntity = SystemAPI.GetSingletonEntity<EnemySpawnComponent>();
+        if (SystemAPI.HasSingleton<EnemySpawnComponent>()) {
+            _enemySpawnEntity = SystemAPI.GetSingletonEntity<EnemySpawnComponent>();
+        }
+        else
+        {
+            return;
+        }
         _enemySpawnComponent = _entityManager.GetComponentData<EnemySpawnComponent>(_enemySpawnEntity);
 
         PhysicsWorldSingleton physicsWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>();

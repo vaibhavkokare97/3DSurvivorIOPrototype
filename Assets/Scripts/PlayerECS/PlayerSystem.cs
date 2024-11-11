@@ -22,7 +22,15 @@ public partial struct PlayerSystem : ISystem
     public void OnUpdate(ref SystemState state)
     {
         _entityManager = state.EntityManager;
-        _playerEntity = SystemAPI.GetSingletonEntity<PlayerComponent>();
+        
+        if (SystemAPI.HasSingleton<PlayerComponent>())
+        {
+            _playerEntity = SystemAPI.GetSingletonEntity<PlayerComponent>();
+        }
+        else
+        {
+            return;
+        }
         _playerComponent = _entityManager.GetComponentData<PlayerComponent>(_playerEntity);
         _playerTransform = _entityManager.GetComponentData<LocalTransform>(_playerEntity);
 
