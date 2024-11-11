@@ -17,7 +17,6 @@ partial struct BulletSystem : ISystem
 
     }
 
-    [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
         _entityManager = state.EntityManager;

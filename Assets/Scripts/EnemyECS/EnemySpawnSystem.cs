@@ -15,8 +15,6 @@ partial struct EnemySpawnSystem : ISystem
     private Random _random;
     private LocalTransform _playerTransform;
 
-
-    [BurstCompile]
     public void OnCreate(ref SystemState state)
     {
         _random = Random.CreateFromIndex((uint)_enemySpawnComponent.GetHashCode());

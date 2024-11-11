@@ -1,0 +1,2 @@
+D:\Unity Projects MSI\3DSurvivorIO\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\CMakeLists.txt
+D:\Unity Projects MSI\3DSurvivorIO\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\CMakeLists.txt

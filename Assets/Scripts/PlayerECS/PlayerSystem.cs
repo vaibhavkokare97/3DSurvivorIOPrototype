@@ -19,7 +19,6 @@ public partial struct PlayerSystem : ISystem
 
     }
 
-    [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
         _entityManager = state.EntityManager;
