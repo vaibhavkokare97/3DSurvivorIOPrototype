@@ -49,10 +49,10 @@ partial struct EnemySystem : ISystem
 
                 float3 moveDirection = math.normalize(_playerTransform.Position - enemyTransform.Position);
 
-                enemyTransform.Position += enemyComponent.Speed * moveDirection * SystemAPI.Time.DeltaTime;
+                enemyTransform.Position += enemyComponent.speed * moveDirection * SystemAPI.Time.DeltaTime;
 
                 enemyComponent.incrementalCheckForPlayerInterval += SystemAPI.Time.DeltaTime;
-                if (enemyComponent.IsSpecial && enemyComponent.incrementalCheckForPlayerInterval > 4f)
+                if (enemyComponent.isSpecial && enemyComponent.incrementalCheckForPlayerInterval > 4f)
                 {
                     NativeList<ColliderCastHit> hits = new NativeList<ColliderCastHit>(Allocator.Temp);
 
@@ -76,10 +76,10 @@ partial struct EnemySystem : ISystem
                                 float3 direction = math.normalize(hitEntityTransform.Position - enemyTransform.Position);
                                 ECB.AddComponent(bulletEntity, new BulletComponent
                                 {
-                                    Speed = 10f,
-                                    Damage = 2f,
-                                    DirectionX = direction.x,
-                                    DirectionZ = direction.z
+                                    speed = 10f,
+                                    damage = 2f,
+                                    directionX = direction.x,
+                                    directionZ = direction.z
                                 });
 
                                 ECB.AddComponent(bulletEntity, new LifeTimeComponent

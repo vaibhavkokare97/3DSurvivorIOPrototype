@@ -8,12 +8,12 @@ public struct EnemySpawnComponent : IComponentData
     public Entity coinPrefab;
     public Entity healthPrefab;
 
-    public int EnemiesSpawnCountPerSecond;
-    public int EnemiesSpawnIncrementAmount;
-    public int MaxEnemiesSpawnPerSecond;
-    public float EnemySpawnRadius;
-    public float MinDistanceFromPlayer;
+    public int enemiesSpawnCountPerSecond;
+    public int enemiesSpawnIncrementAmount;
+    public int maxEnemiesSpawnPerSecond;
+    public float enemySpawnRadius;
+    public float minDistanceFromPlayer;
 
-    public float TimeBeforeNextSpawn;
-    public float CurrentTimeBeforeSpawn;
+    public float timeBeforeNextSpawn;
+    public float currentTimeBeforeSpawn;
 }

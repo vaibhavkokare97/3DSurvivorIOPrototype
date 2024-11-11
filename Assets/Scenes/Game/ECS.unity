@@ -153,12 +153,12 @@ MonoBehaviour:
   enemyBulletPrefab: {fileID: 5499542971909084948, guid: 7d82a608c629a094cbbdbc2858665e1a, type: 3}
   coinPrefab: {fileID: 5669557879359360275, guid: 79ffec1c6d260304caba69c3776d4ca8, type: 3}
   healthPrefab: {fileID: 6767339727971222503, guid: 7ac9be901cb7229428a4cb5990d40e5d, type: 3}
-  EnemiesSpawnCountPerSecond: 20
-  EnemiesSpawnIncrementAmount: 2
-  MaxEnemiesSpawnPerSecond: 100
-  EnemySpawnRadius: 40
-  MinDistanceFromPlayer: 30
-  TimeBeforeNextSpawn: 3
+  enemiesSpawnCountPerSecond: 20
+  enemiesSpawnIncrementAmount: 2
+  maxEnemiesSpawnPerSecond: 100
+  enemySpawnRadius: 40
+  minDistanceFromPlayer: 30
+  timeBeforeNextSpawn: 3
 --- !u!4 &1868049278
 Transform:
   m_ObjectHideFlags: 0

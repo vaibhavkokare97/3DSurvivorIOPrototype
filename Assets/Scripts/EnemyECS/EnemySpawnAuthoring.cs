@@ -9,13 +9,13 @@ class EnemySpawnAuthoring : MonoBehaviour
     public GameObject coinPrefab;
     public GameObject healthPrefab;
 
-    public int EnemiesSpawnCountPerSecond = 10;
-    public int EnemiesSpawnIncrementAmount = 2;
-    public int MaxEnemiesSpawnPerSecond = 50;
-    public float EnemySpawnRadius = 40f;
-    public float MinDistanceFromPlayer = 5f;
+    public int enemiesSpawnCountPerSecond = 10;
+    public int enemiesSpawnIncrementAmount = 2;
+    public int maxEnemiesSpawnPerSecond = 50;
+    public float enemySpawnRadius = 40f;
+    public float minDistanceFromPlayer = 5f;
 
-    public float TimeBeforeNextSpawn = 2f;
+    public float timeBeforeNextSpawn = 2f;
 }
 
 class EnemySpawnAuthoringBaker : Baker<EnemySpawnAuthoring>
@@ -31,12 +31,12 @@ class EnemySpawnAuthoringBaker : Baker<EnemySpawnAuthoring>
             enemyBulletPrefab = GetEntity(authoring.enemyBulletPrefab, TransformUsageFlags.None),
             coinPrefab = GetEntity(authoring.coinPrefab, TransformUsageFlags.None),
             healthPrefab = GetEntity(authoring.healthPrefab, TransformUsageFlags.None),
-            EnemiesSpawnCountPerSecond = authoring.EnemiesSpawnCountPerSecond,
-            EnemiesSpawnIncrementAmount = authoring.EnemiesSpawnIncrementAmount,
-            MaxEnemiesSpawnPerSecond = authoring.MaxEnemiesSpawnPerSecond,
-            EnemySpawnRadius = authoring.EnemySpawnRadius,
-            MinDistanceFromPlayer = authoring.MinDistanceFromPlayer,
-            TimeBeforeNextSpawn = authoring.TimeBeforeNextSpawn,
+            enemiesSpawnCountPerSecond = authoring.enemiesSpawnCountPerSecond,
+            enemiesSpawnIncrementAmount = authoring.enemiesSpawnIncrementAmount,
+            maxEnemiesSpawnPerSecond = authoring.maxEnemiesSpawnPerSecond,
+            enemySpawnRadius = authoring.enemySpawnRadius,
+            minDistanceFromPlayer = authoring.minDistanceFromPlayer,
+            timeBeforeNextSpawn = authoring.timeBeforeNextSpawn,
         });
     }
 }

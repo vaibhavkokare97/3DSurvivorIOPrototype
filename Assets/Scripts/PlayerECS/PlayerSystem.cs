@@ -62,10 +62,10 @@ public partial struct PlayerSystem : ISystem
                         float3 direction = math.normalize(hitEntityTransform.Position - _playerTransform.Position);
                         ECB.AddComponent(bulletEntity, new BulletComponent
                         {
-                            Speed = 25f,
-                            Damage = 110f,
-                            DirectionX = direction.x,
-                            DirectionZ = direction.z
+                            speed = 25f,
+                            damage = 110f,
+                            directionX = direction.x,
+                            directionZ = direction.z
                         });
 
                         ECB.AddComponent(bulletEntity, new LifeTimeComponent
@@ -96,10 +96,10 @@ public partial struct PlayerSystem : ISystem
     {
         foreach (var gameManagerRef in SystemAPI.Query<GameMangerRef>())
         {
-            if (gameManagerRef.Value != null)
+            /*if (gameManagerRef.Value != null)
             {
                 break;
-            }
+            }*/
             _playerTransform.Position += new float3(gameManagerRef.Value.Value.joystick.Horizontal * SystemAPI.Time.DeltaTime,
                 0,
                 gameManagerRef.Value.Value.joystick.Vertical * SystemAPI.Time.DeltaTime) * _playerComponent.moveSpeed;
@@ -135,7 +135,7 @@ public partial struct PlayerSystem : ISystem
                 if (_entityManager.HasComponent<EnemyComponent>(hitEntity))
                 {
                     EnemyComponent enemyComponent = _entityManager.GetComponentData<EnemyComponent>(hitEntity);
-                    _playerComponent.currentHealth -= enemyComponent.Damage;
+                    _playerComponent.currentHealth -= enemyComponent.damage;
                     _entityManager.SetComponentData(_playerEntity, _playerComponent);
 
                     if (_playerComponent.currentHealth <= 0f)
@@ -163,7 +163,7 @@ public partial struct PlayerSystem : ISystem
                 else if (_entityManager.HasComponent<BulletComponent>(hitEntity))
                 {
                     BulletComponent bulletComponent = _entityManager.GetComponentData<BulletComponent>(hitEntity);
-                    _playerComponent.currentHealth -= bulletComponent.Damage;
+                    _playerComponent.currentHealth -= bulletComponent.damage;
                     _entityManager.SetComponentData(_playerEntity, _playerComponent);
 
                     if (_playerComponent.currentHealth <= 0f)

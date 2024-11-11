@@ -75,13 +75,15 @@ public partial struct UpdateGameManagerSystem : ISystem
 {
     public void OnUpdate(ref SystemState state)
     {
-        if (GameManager.Instance == null) return;
-        var entity = state.EntityManager.CreateEntity();
-        state.EntityManager.AddComponentData(entity, new GameMangerRef
+        if (GameManager.Instance != null)
         {
-            Value = GameManager.Instance
-        });
-        state.Enabled = false;
+            var entity = state.EntityManager.CreateEntity();
+            state.EntityManager.AddComponentData(entity, new GameMangerRef
+            {
+                Value = GameManager.Instance
+            });
+            state.Enabled = false;
+        }
     }
 }
 

@@ -2,10 +2,10 @@ using Unity.Entities;
 
 public struct EnemyComponent : IComponentData
 {
-    public bool IsSpecial;
+    public bool isSpecial;
     public float incrementalCheckForPlayerInterval;
 
-    public float CurrentHealth;
-    public float Damage;
-    public float Speed;
+    public float currentHealth;
+    public float damage;
+    public float speed;
 }
